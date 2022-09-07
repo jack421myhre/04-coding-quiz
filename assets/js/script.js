@@ -1,99 +1,85 @@
-const questions = [
-    {
-        question: "Which is the WRONG way to define a variable in JavaScript?",
-        option1: "let",
-        option2: "const",
-        option3: "var",
-        option4: "def",
-    },
-    {
-        question: "How can JavaScript access an element on a page?",
-        option1: "document.querySelector()",
-        option2: "document.fetchID()",
-        option3: "document.getItem()",
-        option4: "document.element()",
-    },
-    {
-        question: "Which of the following is the proper format for a for loop?",
-        option1: "for (let i = 0. i++. i < item.length)",
-        option2: "for (let i = 0; i < item.length; i++)",
-        option3: "for ({let i = 0}, {i < item.length}, {i++})",
-        option4: "for (item[length]; i++; let i = 0)",
-    },
-    {
-        question:
-            "Which character correctly follows a variable declaration in JavaScript?",
-        option1: "Semi colon",
-        option2: "colon",
-        option3: "period",
-        option4: "curly brace",
-    },
-    {
-        question:
-            "Which of the following is one way to reference a property of an object?",
-        option1: "object.name",
-        option2: "object/name",
-        option3: "object-name",
-        option4: "object~name",
-    },
-    {
-        question: "Which of the following is not a primitive data type?",
-        option1: "number/int",
-        option2: "string",
-        option3: "boolean",
-        option4: "hexcode",
-    },
-    {
-        question: "What kind of data does JSON read?",
-        option1: "objects",
-        option2: "arrays",
-        option3: "strings",
-        option4: "loops",
-    },
-    {
-        question: "Which of the variable declarations are not mutable?",
-        option1: "x = 32",
-        option2: "const y = 45",
-        option3: "let z = 24",
-        option4: "var a = 75",
-    },
-    {
-        question: "How do you print data to the console in the browser?",
-        option1: "print(data)",
-        option2: "display(data)",
-        option3: "console.show(data)",
-        option4: "console.log(data)",
-    },
-    {
-        question: "Who is the creator of JavaScript?",
-        option1: "Bill Gates",
-        option2: "Zima Juliapos",
-        option3: "Brendan Eich",
-        option4: "Mark Zuckerberg",
-    },
-];
-
 // HTML elements
-let timer = document.querySelector("#timer");
-let viewHighScores = document.querySelector("#highScores");
-let startBtn = document.querySelector("#startBtn");
-let question = document.querySelector("#question-section");
-let options = document.querySelector("#options");
-let description = document.querySelector("#description");
-// Object keys
-// use a for loop to iterate for all keys in each object
-let questionKeys = Object.keys(questions[0]);
-console.log(questionKeys);
-// event listeners
+const timer = document.querySelector("#timer");
+const viewHighScores = document.querySelector("#high-scores");
+const start = document.querySelector("#start");
+const startBtn = document.querySelector("#start-button");
+const questionTitle = document.querySelector("#title");
+const questionsSection = document.querySelector("#questions-section");
+const newQuestion = document.querySelector("#new-question");
+const optionsList = document.querySelector("#options-list");
+const grade = document.querySelector("#grade");
+const finalScreen = document.querySelector("#final-screen");
+const saveScoreBtn = document.querySelector("#save-score");
+const initials = document.querySelector("#initials");
 
-// starts the quiz
-startBtn.addEventListener("click", (event) => {
-    event.preventDefault();
+let countdown;
+let timeLeft = 100;
+let qIndex = 0;
 
-    startBtn.setAttribute("style", "display: none;");
-    description.setAttribute("style", "display: none;");
+// Tracks the timer once the quiz begins
+function quizTime() {
+    timeLeft--;
+    timer.textContent = timeLeft;
 
-    question.textContent = questions[0].question;
-});
+    if (timeLeft <= 0) {
+        endQuiz();
+    }
+}
 
-console.log("test");
+// Starts the quiz when the start button is clicked
+function beginQuiz() {
+    start.setAttribute("class", "hidden");
+    questionsSection.removeAttribute("class");
+    countdown = setInterval(quizTime, 1000);
+    timer.textContent = timeLeft;
+    // Posts the next question when the current one is answered
+    postQuestion();
+}
+
+// Posts the question to the page/
+function postQuestion() {
+    let currentQ = questions[qIndex];
+    newQuestion.textContent = currentQ.question;
+    optionsList.innerHTML = "";
+
+    // Populates the answer options underneath the question
+    for (let i = 0; i < currentQ.options.length; i++) {
+        let option = currentQ.options[i];
+        let userOption = document.createElement("button");
+        userOption.textContent = i + 1 + ": " + option;
+        userOption.setAttribute("value", option);
+        userOption.setAttribute("class", "option");
+
+        // Adds an event listener to each option and checks if the user is right or wrong
+        userOption.addEventListener("click", (e) => {
+            if (e.target.value !== questions[qIndex].answer) {
+                timeLeft -= 10;
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                }
+                timer.textContent = timeLeft;
+                grade.textContent = "wrong!";
+            } else {
+                grade.textContent = "Right!";
+            }
+
+            // Displays if the user is right or wrong for one second
+            grade.setAttribute("class", "grade");
+            setTimeout(() => {
+                grade.setAttribute("class", "grade hidden");
+            }, 1000);
+
+            // Used to move to the next question
+            qIndex++;
+
+            // Checks the time and if the user is at the end of the quiz, then ends the quiz if true, otherwise it moves to the next question
+            if (timeLeft <= 0 || qIndex === questions.length) {
+                endQuiz();
+            } else {
+                postQuestion();
+            }
+        });
+        // Appends each option to the list of options
+        optionsList.appendChild(userOption);
+    }
+}

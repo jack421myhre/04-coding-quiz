@@ -16,3 +16,18 @@
 .main p {
     width: 400px;
 }
+
+.hidden {
+    display: none;
+}
+
+.option {
+    background-color: aqua;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.grade {
+    font-style: italic;
+    border-top: 2px solid #777;
+}
