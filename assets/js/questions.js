@@ -48,7 +48,8 @@ const questions = [
         answer: "strings",
     },
     {
-        question: "Which of the variable declarations are not mutable?",
+        question:
+            "Which of the variable declarations are not mutable in JavaScript?",
         options: ["x = 32", "const y = 45", "let z = 24", "var a = 75"],
         answer: "const y = 45",
     },
