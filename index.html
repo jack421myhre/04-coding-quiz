@@ -11,16 +11,15 @@
 <body>
     <header>
         <nav class="nav" id="nav">
-                <!-- change to a href -->
             <a href="./highScoresList.html" id="high-scores">View Highscores</a>
-            <p>Time: <span id="timer">0</span></p>
+            <p class="time">Time: <span id="timer">0</span></p>
         </nav>
     </header>
 
+        <!-- Staring page  -->
         <main class="main">
             <section id="start">
                 <h1 id="title">Coding Quiz Challenge</h1>
-
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. 
                     Ad dolorem eaque nihil nostrum mollitia sapiente voluptates, dolor excepturi id numquam! 
@@ -29,11 +28,13 @@
                 <button id="start-button">Start Quiz</button>
             </section>
 
+            <!-- Section for the questions and answers -->
             <div id="questions-section" class="hidden">
                 <h3 id="new-question"></h3>
                 <div class="options-list" id="options-list"></div>
             </div>
 
+            <!-- Final screen for user to submit their score -->
             <div id="final-screen" class="hidden">
                 <h3>You've reached the finish line!</h3>
                 <p>
@@ -49,8 +50,6 @@
 
             <!-- displays when the user is right or wrong -->
             <div id="grade" class="grade hidden"></div>
-
-
 
         </main>
     

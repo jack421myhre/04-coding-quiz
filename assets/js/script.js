@@ -83,3 +83,43 @@ function postQuestion() {
         optionsList.appendChild(userOption);
     }
 }
+
+// Stops the timer, displays the final screen, and sets the current time to be the score
+function endQuiz() {
+    clearInterval(countdown);
+    finalScreen.removeAttribute("class");
+    let score = document.querySelector("#score");
+    score.textContent = timeLeft;
+    questionsSection.setAttribute("class", "hidden");
+}
+
+// Converts the current score to JSON and saves to an array of objects called highScoresList.
+function postHighScore() {
+    let userInitials = initials.value.trim();
+
+    if (userInitials !== "") {
+        let highScoresList =
+            JSON.parse(window.localStorage.getItem("highScoresList")) || [];
+        console.log(highScoresList);
+
+        let userScore = {
+            initials: userInitials,
+            score: timeLeft,
+        };
+        console.log(userScore);
+        highScoresList.push(userScore);
+        console.log(highScoresList);
+        window.localStorage.setItem(
+            "highScoresList",
+            JSON.stringify(highScoresList)
+        );
+        window.location.href = "highScoresList.html";
+    }
+}
+
+// Runs the postHighScore function when the save score button is clicked
+saveScoreBtn.addEventListener("click", () => {
+    postHighScore();
+});
+// listens for the start button to be clicked, then begins quiz
+startBtn.onclick = beginQuiz;
